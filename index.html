@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="style.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image generator</title>
+  </head>
+  <body>
+    <canvas class="orb-canvas"></canvas>
+    <section class="overlay">
+      <div class="overlay__inner">
+
+        <div class="overlay__title">
+            <input type="text" id="promptInput" placeholder="Enter your prompt here">
+            <button onclick="sendPrompt()">Generate</button>
+        </div>
+          <div id="resultContainer" class="overlay__description" >
+              <!-- The generated image will be displayed here -->
+          </div>
+      </div>
+      </section>
+  
+
+    <script>
+      // Function to send the prompt and get the generated image
+      async function sendPrompt() {
+            const promptInput = document.getElementById('promptInput').value;
+            const headers = {
+                "Authorization": "Bearer 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",
+                
+            };
+            const requestOptions = {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify({ "inputs": promptInput })
+            };
+
+            try {
+                const response = await fetch("https://api-inference.huggingface.co/models/prompthero/openjourney", requestOptions);
+                const imageBlob = await response.blob();
+                
+                const imageURL = URL.createObjectURL(imageBlob);
+                displayResult(imageURL);
+                
+                
+
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+      // Function to display the generated image
+      function displayResult(imageURL) {
+            const resultContainer = document.getElementById('resultContainer');
+            resultContainer.innerHTML = `<img src="${imageURL}" alt="Generated Image" class="image">`;
+        }
+  </script>
+  <script src="main.js" type="module"></script>
+  </body>
+</html>
