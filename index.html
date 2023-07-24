@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="/txttoimglogo.jpeg" />
     <link rel="stylesheet" href="style.css"/>
+    <script src="https://kit.fontawesome.com/789ac54095.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Image generator</title>
   </head>
@@ -17,9 +18,15 @@
             <input type="text" id="promptInput" placeholder="Enter your prompt here">
             <button onclick="sendPrompt()">Generate</button>
         </div>
-          <div id="resultContainer" class="overlay__description" >
+        <div  class="overlay__description">
+
+          <div id="resultContainer" >
               <!-- The generated image will be displayed here -->
           </div>
+          <div id="imageDownload">
+
+          </div>
+        </div>
       </div>
       </section>
   
@@ -54,10 +61,31 @@
         }
 
       // Function to display the generated image
-      function displayResult(imageURL) {
+        function displayResult(imageURL) {
             const resultContainer = document.getElementById('resultContainer');
-            resultContainer.innerHTML = `<img src="${imageURL}" alt="Generated Image" class="image">`;
+            resultContainer.innerHTML = `<img id="downloadImg" src="${imageURL}" alt="Generated Image" class="image">`;
+
+            const imageDownload = document.getElementById('imageDownload');
+            imageDownload.innerHTML = `<button id="downloadButton"><i class="fa-solid fa-download"></i></button>`;
+
+            const downloadButton = document.getElementById('downloadButton');
+            downloadButton.addEventListener('click', downloadImage);
         }
+        function downloadImage() {
+          const imgElement = document.getElementById('downloadImg');
+          const imgURL = imgElement.src;
+          const fileName = 'downloaded_image.jpg';          
+          const link = document.createElement('a');
+          link.innerText = "Working...";
+          link.href = imgURL;
+          link.download = fileName;
+
+          
+          link.click();
+        }
+        
+
+        
   </script>
   <script src="main.js" type="module"></script>
   </body>
